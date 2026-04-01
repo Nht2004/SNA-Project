@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Task</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Add Task</h1>
+
+<form id="taskForm">
+  <label>Name</label>
+  <input type="text" id="name" required>
+
+  <label>Description</label>
+  <input type="text" id="description">
+
+  <label>Responsible</label>
+  <input type="text" id="responsible" required>
+
+  <label>Deadline</label>
+  <input type="date" id="deadline" required>
+
+  <button type="submit">💾 Save</button>
+  <button type="button" class="back-btn" onclick="goBack()">⬅ Back</button>
+</form>
+
+<script>
+function goBack() {
+  window.location.href = "index.html";
+}
+
+document.getElementById("taskForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  await fetch("http://localhost:3000/api/tasks", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      name: name.value,
+      description: description.value,
+      responsible: responsible.value,
+      deadline: deadline.value
+    })
+  });
+
+  alert("Task added!");
+
+  setTimeout(() => {
+    window.location.href = "index.html";
+  }, 800);
+});
+</script>
+
+</body>
+</html>
