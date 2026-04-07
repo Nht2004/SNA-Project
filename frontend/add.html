@@ -8,49 +8,48 @@
 
 <h1>Add Task</h1>
 
+<div class="form-container">
 <form id="taskForm">
-  <label>Name</label>
-  <input type="text" id="name" required>
 
-  <label>Description</label>
-  <input type="text" id="description">
-
-  <label>Responsible</label>
-  <input type="text" id="responsible" required>
-
-  <label>Deadline</label>
+  <input type="text" id="name" placeholder="Name" required>
+  <input type="text" id="description" placeholder="Description">
+  <input type="text" id="responsible" placeholder="Responsible" required>
   <input type="date" id="deadline" required>
 
-  <button type="submit">💾 Save</button>
-  <button type="button" class="back-btn" onclick="goBack()">⬅ Back</button>
-</form>
+  <div class="center">
+    <button type="submit">Save</button>
+    <button type="button" onclick="goBack()">Back</button>
+  </div>
 
+</form>
+</div>
 <script>
-function goBack() {
+  function goBack() {
   window.location.href = "index.html";
 }
-
 document.getElementById("taskForm").addEventListener("submit", async (e) => {
   e.preventDefault();
+
+  const name = document.getElementById("name").value;
+  const description = document.getElementById("description").value;
+  const responsible = document.getElementById("responsible").value;
+  const deadline = document.getElementById("deadline").value;
 
   await fetch("http://localhost:3000/api/tasks", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({
-      name: name.value,
-      description: description.value,
-      responsible: responsible.value,
-      deadline: deadline.value
+      name,
+      description,
+      responsible,
+      deadline
     })
   });
 
-  alert("Task added!");
-
-  setTimeout(() => {
-    window.location.href = "index.html";
-  }, 800);
+  window.location.href = "index.html";
 });
 </script>
+
 
 </body>
 </html>

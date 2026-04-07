@@ -1,16 +1,18 @@
+version: "3.8"
+
 services:
   mysql:
-    image: mysql:8
+    image: mysql:8.0.36-debian
     container_name: mysql_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: taskdb
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./backend/db.sql:/docker-entrypoint-initdb.d/db.sql
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   backend:
     build: ./backend
@@ -22,7 +24,6 @@ services:
       - mysql
     env_file:
       - ./backend/.env
-    command: sh -c "sleep 10 && node server.js"
 
   frontend:
     build: ./frontend

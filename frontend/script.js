@@ -2,6 +2,15 @@ const API = "http://localhost:3000/api/tasks";
 
 let chart;
 
+// format date chuẩn yyyy-mm-dd
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
 async function loadTasks() {
   const res = await fetch(API);
   const data = await res.json();
@@ -16,9 +25,10 @@ async function loadTasks() {
 
     table.innerHTML += `
       <tr>
-        <td>${task.name}</td>
-        <td>${task.responsible}</td>
-        <td>${task.deadline}</td>
+        <td>${task.name || ""}</td>
+        <td>${task.description || ""}</td>
+        <td>${task.responsible || ""}</td>
+        <td>${formatDate(task.deadline)}</td>
         <td>${task.status}</td>
         <td>
           <button onclick="goEdit(${task.id})">Edit</button>
@@ -32,6 +42,8 @@ async function loadTasks() {
 }
 
 async function deleteTask(id) {
+  if (!confirm("Delete this task?")) return;
+
   await fetch(`${API}/${id}`, { method: "DELETE" });
   loadTasks();
 }
@@ -54,7 +66,8 @@ function drawChart(statusCount) {
     data: {
       labels: Object.keys(statusCount),
       datasets: [{
-        data: Object.values(statusCount)
+        data: Object.values(statusCount),
+        backgroundColor: ["#f39c12", "#2ecc71"]
       }]
     }
   });

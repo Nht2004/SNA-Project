@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Task</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Edit Task</h2>
+
+<div class="form-container">
+<form id="editForm">
+
+  <input type="text" id="name" placeholder="Name">
+  <input type="text" id="description" placeholder="Description">
+  <input type="text" id="responsible" placeholder="Responsible">
+  <input type="date" id="deadline">
+
+  <select id="status">
+    <option value="Pending">Pending</option>
+    <option value="Done">Done</option>
+  </select>
+
+  <div class="center">
+    <button type="submit">Save</button>
+  </div>
+
+</form>
+</div>
+
+<script>
+const API = "http://localhost:3000/api/tasks";
+const id = new URLSearchParams(window.location.search).get("id");
+
+// format date
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+// load
+async function loadTask() {
+  const res = await fetch(`${API}/${id}`);
+  const task = await res.json();
+
+  document.getElementById("name").value = task.name || "";
+  document.getElementById("description").value = task.description || "";
+  document.getElementById("responsible").value = task.responsible || "";
+  document.getElementById("deadline").value = formatDate(task.deadline);
+  document.getElementById("status").value = task.status || "Pending";
+}
+
+// update
+document.getElementById("editForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("name").value;
+  const description = document.getElementById("description").value;
+  const responsible = document.getElementById("responsible").value;
+  const deadline = document.getElementById("deadline").value;
+  const status = document.getElementById("status").value;
+
+  await fetch(`${API}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name,
+      description,
+      responsible,
+      deadline,
+      status
+    })
+  });
+
+  window.location.href = "index.html";
+});
+
+loadTask();
+</script>
+
+</body>
+</html>
