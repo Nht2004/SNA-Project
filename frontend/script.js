@@ -1,5 +1,4 @@
-const API = "http://localhost:3000/api/tasks";
-
+const API = "/api/tasks";
 let chart;
 
 // format date chuẩn yyyy-mm-dd
