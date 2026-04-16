@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   # 🔴 Reverse Proxy (Entry point)
   nginx:
@@ -63,4 +61,3 @@ volumes:
 # 🌐 Network riêng
 networks:
   app-network:
-    driver: bridge
